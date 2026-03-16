@@ -120,7 +120,11 @@ public struct PrintSceneBuilder {
             let index = abs(key.filament) % colors.count
             color = colors[index]
         }
-        return PlatformColor(red: color.red, green: color.green, blue: color.blue, alpha: color.alpha)
+        return platformColor(color)
+    }
+
+    private func platformColor(_ color: ColorPalette.Color) -> PlatformColor {
+        PlatformColor(red: color.red, green: color.green, blue: color.blue, alpha: color.alpha)
     }
 
     private func addDefaultLighting(to root: SCNNode) {
@@ -162,13 +166,15 @@ public struct PrintSceneBuilder {
             chamferRadius: 1.5
         )
 
+        let plateColors = palette.buildPlate
+
         let sideMaterial = SCNMaterial()
-        sideMaterial.diffuse.contents = PlatformColor(red: 0.20, green: 0.22, blue: 0.25, alpha: 1)
+        sideMaterial.diffuse.contents = platformColor(plateColors.side)
         sideMaterial.lightingModel = .blinn
         sideMaterial.roughness.contents = 0.95
 
         let topMaterial = SCNMaterial()
-        topMaterial.diffuse.contents = PlatformColor(red: 0.12, green: 0.13, blue: 0.15, alpha: 1)
+        topMaterial.diffuse.contents = platformColor(plateColors.top)
         topMaterial.lightingModel = .blinn
         topMaterial.roughness.contents = 1.0
 
@@ -193,7 +199,7 @@ public struct PrintSceneBuilder {
             chamferRadius: 1.2
         )
         let frameMaterial = SCNMaterial()
-        frameMaterial.diffuse.contents = PlatformColor(red: 0.28, green: 0.30, blue: 0.34, alpha: 1)
+        frameMaterial.diffuse.contents = platformColor(plateColors.frame)
         frameMaterial.lightingModel = .blinn
         frameGeometry.materials = Array(repeating: frameMaterial, count: 6)
 
@@ -210,12 +216,14 @@ public struct PrintSceneBuilder {
         let minorSpacing: Float = 10
         let majorSpacing: Float = 50
 
+        let plateColors = palette.buildPlate
+
         let minorMaterial = SCNMaterial()
-        minorMaterial.diffuse.contents = PlatformColor(red: 0.32, green: 0.34, blue: 0.38, alpha: 0.45)
+        minorMaterial.diffuse.contents = platformColor(plateColors.gridMinor)
         minorMaterial.lightingModel = .constant
 
         let majorMaterial = SCNMaterial()
-        majorMaterial.diffuse.contents = PlatformColor(red: 0.42, green: 0.45, blue: 0.50, alpha: 0.72)
+        majorMaterial.diffuse.contents = platformColor(plateColors.gridMajor)
         majorMaterial.lightingModel = .constant
 
         let firstX = ceil(buildPlate.minX / minorSpacing) * minorSpacing
