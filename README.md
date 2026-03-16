@@ -73,3 +73,7 @@ let model = try parser.parse(gcodeString, maxLayer: 42)
 
 - iOS 17.0+ / macOS 14.0+
 - Swift 5.9+
+
+## License
+
+GCodePreview is available under the MIT License. See [LICENSE](LICENSE) for details.
