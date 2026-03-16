@@ -5,7 +5,6 @@ A Swift Package for parsing G-code and rendering 3D print previews using SceneKi
 ## Features
 
 - **G-code parsing** — Supports G0/G1 linear moves, G2/G3 arc moves, absolute/relative positioning, retraction tracking, and move type classification (perimeter, infill, support, skirt)
-- **3MF support** — Extracts embedded G-code from `.3mf` archives (Bambu Studio, PrusaSlicer, etc.) with multi-plate support
 - **3D scene rendering** — Builds a SceneKit scene with color-coded filament paths, a build plate with grid lines, lighting, and an automatic camera
 - **SwiftUI view** — Drop-in `GCodePreviewView` with orbit/turntable camera controls for both iOS and macOS
 - **Layer-by-layer access** — Query individual print layers, segment counts, and build dimensions
@@ -53,14 +52,6 @@ let palette = ColorPalette(
     filamentColors: [.init(red: 1, green: 1, blue: 1)],
     supportColor: .init(red: 0.5, green: 0.5, blue: 0.5, alpha: 0.5)
 )
-```
-
-### Extract G-code from a .3mf file
-
-```swift
-let reader = ThreeMFReader()
-let extracted = try reader.extractGCode(from: fileURL, preferredPlateId: 0)
-let model = try GCodeParser().parse(extracted.content)
 ```
 
 ### Limit rendering to a specific layer
