@@ -14,7 +14,11 @@ public struct PrintSceneBuilder {
     private static let defaultCameraNodeName = "preview_camera"
     private static let defaultCameraTargetNodeName = "preview_camera_target"
 
-    public init() {}
+    private let palette: ColorPalette
+
+    public init(palette: ColorPalette = .default) {
+        self.palette = palette
+    }
 
     public func buildScene(from model: PrintModel) -> SCNScene {
         let scene = SCNScene()
@@ -108,21 +112,15 @@ public struct PrintSceneBuilder {
     }
 
     private func color(for key: GroupKey) -> PlatformColor {
+        let color: ColorPalette.Color
         if key.moveType == .support {
-            return PlatformColor(red: 0.38, green: 0.58, blue: 0.92, alpha: 0.55)
+            color = palette.supportColor
+        } else {
+            let colors = palette.filamentColors
+            let index = abs(key.filament) % colors.count
+            color = colors[index]
         }
-
-        let palette: [PlatformColor] = [
-            PlatformColor(red: 0.88, green: 0.27, blue: 0.24, alpha: 1),
-            PlatformColor(red: 0.16, green: 0.65, blue: 0.36, alpha: 1),
-            PlatformColor(red: 0.94, green: 0.70, blue: 0.18, alpha: 1),
-            PlatformColor(red: 0.30, green: 0.39, blue: 0.93, alpha: 1),
-            PlatformColor(red: 0.92, green: 0.45, blue: 0.16, alpha: 1),
-            PlatformColor(red: 0.12, green: 0.62, blue: 0.74, alpha: 1)
-        ]
-
-        let index = abs(key.filament) % palette.count
-        return palette[index]
+        return PlatformColor(red: color.red, green: color.green, blue: color.blue, alpha: color.alpha)
     }
 
     private func addDefaultLighting(to root: SCNNode) {

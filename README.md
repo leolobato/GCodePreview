@@ -30,11 +30,29 @@ import GCodePreview
 let parser = GCodeParser()
 let model = try parser.parse(gcodeString)
 
-let builder = PrintSceneBuilder()
+let palette = ColorPalette(filamentColors: [
+    .init(red: 0.88, green: 0.27, blue: 0.24),  // Red
+    .init(red: 0.16, green: 0.65, blue: 0.36),  // Green
+    .init(red: 0.94, green: 0.70, blue: 0.18),  // Yellow
+    .init(red: 0.30, green: 0.39, blue: 0.93),  // Blue
+    .init(red: 0.92, green: 0.45, blue: 0.16),  // Orange
+    .init(red: 0.12, green: 0.62, blue: 0.74),  // Cyan
+])
+
+let builder = PrintSceneBuilder(palette: palette)
 let scene = builder.buildScene(from: model)
 
 // In SwiftUI:
 GCodePreviewView(scene: scene)
+```
+
+Colors are cycled when there are more filaments than palette entries. You can also customize the support material color:
+
+```swift
+let palette = ColorPalette(
+    filamentColors: [.init(red: 1, green: 1, blue: 1)],
+    supportColor: .init(red: 0.5, green: 0.5, blue: 0.5, alpha: 0.5)
+)
 ```
 
 ### Extract G-code from a .3mf file
